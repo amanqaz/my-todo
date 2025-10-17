@@ -1,16 +1,48 @@
 
+import React,{useState} from 'react';
 import './App.css';
-
+import NewTodoForm from './components/newTodoForm';
 import TodoTable from './components/TodoTable';
 function App() {
-  let todos = [
+  const [showAddTodoForm,setShowAddTodoForm] = useState(false);
+
+
+  //de stucruring todos 
+ const [todos,setTodos]= useState ( [
     {rowNumber:1,rowDescription:'feed puppy',rowAssigned:"aman"},
     {rowNumber:2,rowDescription:"Get hair cut",rowAssigned:"vivesh"},
     {rowNumber:3,rowDescription:"water the plant",rowAssigned:"Aditya"},
     {rowNumber:4,rowDescription:"Come FLy with Me",rowAssigned:"Shobit"},
     {rowNumber:5,rowDescription:"Get Well soon Mamu",rowAssigned:"Murli Prasad"}
   ]
+)
 
+const addTodo=(description,assigned)=>{
+  let rowNumber=0;
+   
+  if(todos.length > 0){
+    rowNumber = todos[todos.length -1].rowNumber + 1;
+  }else{
+    rowNumber=1;
+  }
+   const newTodos = {
+    rowNumber:rowNumber,
+    rowDescription: description,
+    rowAssigned:assigned
+  };
+    setTodos(todo=>[...todo,newTodos])// ...todo is destructuring 
+  
+  // todos.push(newTodos);
+  // console.log(newTodos)
+
+
+}
+const deleteTodo =(deleteTodoRowNumber)=>{
+  let filtered = todos.filter(function (value){
+    return value.rowNumber !== deleteTodoRowNumber;
+  })
+  setTodos(filtered);
+}
 
 
   return (
@@ -21,11 +53,15 @@ function App() {
         </div>
         <div className='card-body'>
         
-            <TodoTable todos={todos} />
-           
-          
+            <TodoTable todos={todos} deleteTodo={deleteTodo} />
+            <button onClick ={()=>setShowAddTodoForm(!showAddTodoForm)} className='btn btn-primary' >
+             {showAddTodoForm ?'Close Tab':'New Tode'}
+              </button>
+            {showAddTodoForm && 
+            <NewTodoForm addTodo={addTodo}/>
+            }
         </div>
-      </div>
+      </div> 
    
      
     </div>
