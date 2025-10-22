@@ -38,10 +38,26 @@ const addTodo=(description,assigned)=>{
 
 }
 const deleteTodo =(deleteTodoRowNumber)=>{
-  let filtered = todos.filter(function (value){
-    return value.rowNumber !== deleteTodoRowNumber;
-  })
-  setTodos(filtered);
+  // let filtered = todos.filter(function (value){
+  //   return value.rowNumber !== deleteTodoRowNumber;
+  // })
+  // const reIndexed = filtered.map((todo, index) => ({
+  //   ...todo,
+  //   rowNumber: index + 1, // renumber from 1 upwards
+  // }));
+  let newTodos = [];
+  let counter = 1;
+
+  for (const todo of todos) {
+    if (todo.rowNumber !== deleteTodoRowNumber) {
+      // keep only the non-deleted ones
+      newTodos.push({
+        ...todo,
+        rowNumber: counter++, // assign new row number on the fly
+      });
+    }
+  }
+  setTodos(newTodos);
 }
 
 
