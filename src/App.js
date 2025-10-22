@@ -56,10 +56,14 @@ const deleteTodo =(deleteTodoRowNumber)=>{
             <TodoTable todos={todos} deleteTodo={deleteTodo} />
             <button onClick ={()=>setShowAddTodoForm(!showAddTodoForm)} className='btn btn-primary' >
              {showAddTodoForm ?'Close Tab':'New Tode'}
-              </button>
+               </button>
+              
+             
+              
             {showAddTodoForm && 
             <NewTodoForm addTodo={addTodo}/>
             }
+            
         </div>
       </div> 
    

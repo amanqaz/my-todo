@@ -8,6 +8,7 @@ function TodoTable(props){
                     <th scope='col'>#</th>
                     <th scope='col'>Description</th>
                     <th scope='col'>Assigned User</th>
+                    <th scope='col'>Action</th>
                 </tr>
             </thead>
          <tbody>
