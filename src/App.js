@@ -67,7 +67,7 @@ function App() {
   };
 
   const editTodo = (todoUpdate) => {
-    setShowAddTodoForm(!showAddTodoForm);
+    setShowAddTodoForm(true);
     setEditEnable(true);
     const comingTodo = todos.find((e) => e.rowNumber === todoUpdate.rowNumber);
     setEditExistingTodo(comingTodo);

@@ -23,7 +23,7 @@ function NewTodoForm(props) {
 
   useEffect(() => {
     console.log(props.editEnable);
-    if (props.editTododata != null && props.editEnable) {
+    if (props.editTododata !== null && props.editEnable) {
       setAssigned(props.editTododata.rowAssigned || "");
       setDescription(props.editTododata.rowDescription || "");
     }
