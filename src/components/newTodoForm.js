@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 function NewTodoForm(props) {
   const [description, setDescription] = useState("");
   const [assigned, setAssigned] = useState("");
@@ -20,6 +20,14 @@ function NewTodoForm(props) {
       setDescription("");
     }
   };
+
+  useEffect(() => {
+    console.log(props.editEnable);
+    if (props.editTododata != null) {
+      setAssigned(props.editTododata.rowAssigned || "");
+      setDescription(props.editTododata.rowDescription || "");
+    }
+  }, [props.editEnable, props.editTododata]);
 
   return (
     <div className="mt-5">

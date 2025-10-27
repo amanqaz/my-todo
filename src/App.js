@@ -7,6 +7,7 @@ function App() {
   const [showAddTodoForm, setShowAddTodoForm] = useState(false);
 
   const [editEnable, setEditEnable] = useState(false);
+  const [editExistingTodo, setEditExistingTodo] = useState(null);
 
   //de stucruring todos
   const [todos, setTodos] = useState([
@@ -40,6 +41,7 @@ function App() {
     // todos.push(newTodos);
     // console.log(newTodos)
   };
+
   const deleteTodo = (deleteTodoRowNumber) => {
     // let filtered = todos.filter(function (value){
     //   return value.rowNumber !== deleteTodoRowNumber;
@@ -66,8 +68,9 @@ function App() {
 
   const editTodo = (todoUpdate) => {
     setShowAddTodoForm(!showAddTodoForm);
-    setEditEnable(!editEnable);
+    setEditEnable(true);
     const comingTodo = todos.find((e) => e.rowNumber === todoUpdate.rowNumber);
+    setEditExistingTodo(comingTodo);
 
     console.log("Received todo:", comingTodo);
     console.log(comingTodo?.rowAssigned);
@@ -91,7 +94,13 @@ function App() {
             {showAddTodoForm ? "Close Todo" : "New Todo"}
           </button>
 
-          {showAddTodoForm && <NewTodoForm addTodo={addTodo} />}
+          {showAddTodoForm && (
+            <NewTodoForm
+              addTodo={addTodo}
+              enableEdit={editEnable}
+              editTododata={editExistingTodo}
+            />
+          )}
         </div>
       </div>
     </div>
