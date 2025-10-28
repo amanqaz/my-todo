@@ -1,85 +1,71 @@
 import React, { useState } from "react";
-import "./App.css";
-import NewTodoForm from "./components/newTodoForm";
+
+import NewTodoForm from "./components/NewTodoForm";
 import TodoTable from "./components/TodoTable";
 
 function App() {
   const [showAddTodoForm, setShowAddTodoForm] = useState(false);
-
   const [editEnable, setEditEnable] = useState(false);
-  const [editExistingTodo, setEditExistingTodo] = useState(null);
+  const [editTodoData, setEditTodoData] = useState(null);
 
-  //de stucruring todos
   const [todos, setTodos] = useState([
-    { rowNumber: 1, rowDescription: "feed puppy", rowAssigned: "aman" },
-    { rowNumber: 2, rowDescription: "Get hair cut", rowAssigned: "vivesh" },
-    { rowNumber: 3, rowDescription: "water the plant", rowAssigned: "Aditya" },
-    { rowNumber: 4, rowDescription: "Come FLy with Me", rowAssigned: "Shobit" },
+    { rowNumber: 1, rowDescription: "Feed puppy", rowAssigned: "Aman" },
+    { rowNumber: 2, rowDescription: "Get haircut", rowAssigned: "Vivesh" },
+    { rowNumber: 3, rowDescription: "Water the plant", rowAssigned: "Aditya" },
+    { rowNumber: 4, rowDescription: "Come Fly with Me", rowAssigned: "Shobit" },
     {
       rowNumber: 5,
-      rowDescription: "Get Well soon Mamu",
-      rowAssigned: "Murli Prasad",
+      rowDescription: "Get well soon Mamu",
+      rowAssigned: "Murli",
     },
   ]);
 
-  const addTodo = (description, assigned) => {
-    let rowNumber = 0;
-
-    if (todos.length > 0) {
-      rowNumber = todos[todos.length - 1].rowNumber + 1;
+  //  Add or Update todo
+  const addOrUpdateTodo = (description, assigned) => {
+    if (editEnable && editTodoData) {
+      // update existing todo
+      const updatedTodos = todos.map((todo) =>
+        todo.rowNumber === editTodoData.rowNumber
+          ? { ...todo, rowDescription: description, rowAssigned: assigned }
+          : todo
+      );
+      setTodos(updatedTodos);
+      setEditEnable(false);
+      setEditTodoData(null);
     } else {
-      rowNumber = 1;
+      // add new todo
+      const rowNumber =
+        todos.length > 0 ? todos[todos.length - 1].rowNumber + 1 : 1;
+      const newTodo = {
+        rowNumber,
+        rowDescription: description,
+        rowAssigned: assigned,
+      };
+      setTodos([...todos, newTodo]);
     }
-    const newTodos = {
-      rowNumber: rowNumber,
-      rowDescription: description,
-      rowAssigned: assigned,
-    };
-    setTodos((todo) => [...todo, newTodos]); // ...todo is destructuring
-    setShowAddTodoForm(!showAddTodoForm);
 
-    // todos.push(newTodos);
-    // console.log(newTodos)
+    setShowAddTodoForm(false);
   };
 
+  // Delete todo
   const deleteTodo = (deleteTodoRowNumber) => {
-    // let filtered = todos.filter(function (value){
-    //   return value.rowNumber !== deleteTodoRowNumber;
-    // })
-    // const reIndexed = filtered.map((todo, index) => ({
-    //   ...todo,
-    //   rowNumber: index + 1, // renumber from 1 upwards
-    // }));
-
-    let newTodos = [];
-    let counter = 1;
-
-    for (const todo of todos) {
-      if (todo.rowNumber !== deleteTodoRowNumber) {
-        // keep only the non-deleted ones
-        newTodos.push({
-          ...todo,
-          rowNumber: counter++, // assign new row number on the fly
-        });
-      }
-    }
+    const newTodos = todos
+      .filter((todo) => todo.rowNumber !== deleteTodoRowNumber)
+      .map((todo, index) => ({ ...todo, rowNumber: index + 1 }));
     setTodos(newTodos);
   };
 
-  const editTodo = (todoUpdate) => {
+  // Trigger edit mode
+  const editTodo = (todo) => {
     setShowAddTodoForm(true);
     setEditEnable(true);
-    const comingTodo = todos.find((e) => e.rowNumber === todoUpdate.rowNumber);
-    setEditExistingTodo(comingTodo);
-
-    console.log("Received todo:", comingTodo);
-    console.log(comingTodo?.rowAssigned);
+    setEditTodoData(todo);
   };
 
   return (
     <div className="mt-5 container">
       <div className="card">
-        <div className="card-header">Your Todo's</div>
+        <div className="card-header">Your Todos</div>
         <div className="card-body">
           <TodoTable
             todos={todos}
@@ -88,17 +74,21 @@ function App() {
           />
 
           <button
-            onClick={() => setShowAddTodoForm(!showAddTodoForm)}
-            className="btn btn-primary"
+            onClick={() => {
+              setShowAddTodoForm(!showAddTodoForm);
+              setEditEnable(false);
+              setEditTodoData(null);
+            }}
+            className="btn btn-primary mt-3"
           >
             {showAddTodoForm ? "Close Todo" : "New Todo"}
           </button>
 
           {showAddTodoForm && (
             <NewTodoForm
-              addTodo={addTodo}
+              addTodo={addOrUpdateTodo}
               enableEdit={editEnable}
-              editTododata={editExistingTodo}
+              editTododata={editTodoData}
             />
           )}
         </div>

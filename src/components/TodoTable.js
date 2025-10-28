@@ -1,30 +1,40 @@
 import TodoRowItem from "./TodoRowItem";
 
-function TodoTable(props) {
+function TodoTable({ todos = [], deleteTodo, editTodo }) {
   return (
     <table className="table table-hover">
       <thead>
         <tr>
-          <th scope="col">#</th>
-          <th scope="col">Description</th>
-          <th scope="col">Assigned User</th>
-          <th scope="col">Action</th>
-          <th scope="col"> Edit</th>
+          <th>#</th>
+          <th>Description</th>
+          <th>Assigned User</th>
+          <th>Action</th>
+          <th>Edit</th>
+          <th>Photo</th>
         </tr>
       </thead>
       <tbody>
-        {props.todos.map((todo) => (
-          <TodoRowItem
-            key={todo.rowNumber}
-            rowNumber={todo.rowNumber}
-            rowDescription={todo.rowDescription}
-            rowAssigned={todo.rowAssigned}
-            deleteTodo={props.deleteTodo}
-            editTodo={props.editTodo}
-          />
-        ))}
+        {todos.length > 0 ? (
+          todos.map((todo) => (
+            <TodoRowItem
+              key={todo.rowNumber}
+              rowNumber={todo.rowNumber}
+              rowDescription={todo.rowDescription}
+              rowAssigned={todo.rowAssigned}
+              deleteTodo={deleteTodo}
+              editTodo={editTodo}
+            />
+          ))
+        ) : (
+          <tr>
+            <td colSpan="6" className="text-center text-muted">
+              No todos found
+            </td>
+          </tr>
+        )}
       </tbody>
     </table>
   );
 }
+
 export default TodoTable;

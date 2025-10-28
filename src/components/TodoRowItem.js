@@ -1,17 +1,23 @@
-function TodoRowItem(props) {
+function TodoRowItem({
+  rowNumber,
+  rowDescription,
+  rowAssigned,
+  deleteTodo,
+  editTodo,
+}) {
   return (
     <tr>
-      <th scope="row">{props.rowNumber}</th>
-      <td>{props.rowDescription}</td>
-      <td>{props.rowAssigned}</td>
+      <th scope="row">{rowNumber}</th>
+      <td>{rowDescription}</td>
+      <td>{rowAssigned}</td>
 
       <td>
         <button
           className="btn btn-danger btn-sm"
           onClick={(e) => {
-            e.stopPropagation(); // 👈 prevent row-level click if added later
+            e.stopPropagation();
             if (window.confirm("Are you sure you want to delete this todo?")) {
-              props.deleteTodo(props.rowNumber);
+              deleteTodo(rowNumber);
             }
           }}
         >
@@ -21,20 +27,25 @@ function TodoRowItem(props) {
 
       <td>
         <button
-          className="btn btn-primary"
+          className="btn btn-primary btn-sm"
           onClick={(e) => {
-            e.stopPropagation(); // 👈 prevent row-level click if added later
-            props.editTodo({
-              rowNumber: props.rowNumber,
-              rowAssigned: props.rowAssigned,
-              rowDescription: props.rowDescription,
+            e.stopPropagation();
+            editTodo({
+              rowNumber,
+              rowAssigned,
+              rowDescription,
             });
           }}
         >
           Edit
         </button>
       </td>
+
+      <td>
+        <span className="text-muted">Upload Photo</span>
+      </td>
     </tr>
   );
 }
+
 export default TodoRowItem;
